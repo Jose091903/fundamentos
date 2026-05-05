@@ -81,9 +81,15 @@
 
             <div class="metrics-grid">
                 <div class="metric-box">
-                    <h3>Comienza a dañarse el:</h3>
+                    <h3 id="critical-title">Comienza a dañarse el:</h3>
                     <p class="value date-value" id="critical-date">--/--/----</p>
                     <p class="sub-value">(Riesgo alto de merma)</p>
+                    <div id="countdown-timer" class="countdown-timer hidden">
+                        <div class="cd-time"><span id="cd-days">0</span><span>d</span></div>
+                        <div class="cd-time"><span id="cd-hours">0</span><span>h</span></div>
+                        <div class="cd-time"><span id="cd-minutes">0</span><span>m</span></div>
+                        <div class="cd-time"><span id="cd-seconds">0</span><span>s</span></div>
+                    </div>
                 </div>
                 <div class="metric-box">
                     <h3>Valor Actual Estimado</h3>

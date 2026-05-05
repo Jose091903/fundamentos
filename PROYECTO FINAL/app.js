@@ -11,18 +11,26 @@
 const LAT = -17.78; // Santa Cruz de la Sierra
 const LON = -63.18;
 
-// Constantes de deterioro (k) base de tu estudio
+// Constantes de deterioro (k) base de tu estudio (Ajustadas para mayor realismo)
 const PRODUCT_CONSTANTS = {
     lechuga: 0.320,
-    cebolla: 0.110,
-    tomate: 0.099,
+    cebolla: 0.050, // Ajustado a ~32 días críticos
+    tomate: 0.200,  // Ajustado a ~8 días críticos
     papa: 0.083
+};
+
+const PRODUCT_NAMES = {
+    lechuga: "La Lechuga",
+    cebolla: "La Cebolla",
+    tomate: "El Tomate",
+    papa: "La Papa"
 };
 
 // ==========================================
 // ESTADO GLOBAL
 // ==========================================
-let currentTemp = null; // Temperatura actual de Santa Cruz
+let currentTemp = null; // Temperatura actual o histórica
+let timerInterval = null; // Para el contador regresivo
 
 // ==========================================
 // ELEMENTOS DEL DOM
@@ -59,17 +67,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// API CLIMA (Usando Open-Meteo, gratis y sin API Key)
+// API CLIMA (Histórico y Actual)
 // ==========================================
-async function fetchWeather() {
+async function fetchWeather(purchaseDateStr = null) {
     try {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true`;
-        const response = await fetch(url);
+        tempDisplay.textContent = "Cargando...";
+        let url;
+        const today = new Date().toISOString().split('T')[0];
         
-        if (!response.ok) throw new Error("Error en la respuesta de la API");
+        if (!purchaseDateStr || purchaseDateStr === today) {
+            // Clima de hoy
+            url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            const data = await response.json();
+            currentTemp = data.current_weather.temperature;
+        } else {
+            // Clima histórico (hasta 31 días atrás)
+            url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max&past_days=31&timezone=America%2FLa_Paz`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Error en la respuesta de la API");
+            const data = await response.json();
+            
+            const index = data.daily.time.indexOf(purchaseDateStr);
+            if (index !== -1 && data.daily.temperature_2m_max[index] !== null) {
+                currentTemp = data.daily.temperature_2m_max[index];
+            } else {
+                // Fallback si la fecha es muy antigua
+                currentTemp = 28; 
+            }
+        }
         
-        const data = await response.json();
-        currentTemp = data.current_weather.temperature;
         tempDisplay.textContent = `${Math.round(currentTemp)}°C`;
     } catch (error) {
         console.error("No se pudo obtener el clima:", error);
@@ -116,7 +144,7 @@ function getDaysElapsed(purchaseDateStr) {
 // MANEJADORES DE EVENTOS
 // ==========================================
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // Obtener valores del formulario
@@ -128,6 +156,9 @@ form.addEventListener('submit', (e) => {
     btnLoader.classList.remove('hidden');
     calculateBtn.querySelector('span').style.opacity = '0';
     
+    // Obtener clima específico de la fecha seleccionada
+    await fetchWeather(purchaseDate);
+    
     setTimeout(() => {
         procesarCalculo(productKey, purchaseDate, v0);
         
@@ -137,7 +168,7 @@ form.addEventListener('submit', (e) => {
         // Transición de UI
         mainCard.classList.add('hidden');
         resultsSection.classList.remove('hidden');
-    }, 600); // Pequeño delay para sensación de "procesamiento"
+    }, 400); // Pequeño delay para sensación de "procesamiento"
 });
 
 resetBtn.addEventListener('click', () => {
@@ -151,6 +182,9 @@ resetBtn.addEventListener('click', () => {
 // ==========================================
 
 function procesarCalculo(productKey, purchaseDateStr, v0) {
+    // Limpiar timer viejo si existe
+    if (timerInterval) clearInterval(timerInterval);
+
     // 1. Obtener k ajustado
     const k = getAdjustedK(productKey);
     
@@ -163,10 +197,19 @@ function procesarCalculo(productKey, purchaseDateStr, v0) {
     // Sumar los días críticos (redondeados al alza para mayor seguridad)
     criticalDateObj.setDate(criticalDateObj.getDate() + Math.ceil(tCritico));
     
+    // Título dinámico
+    const titleEl = document.getElementById('critical-title');
+    if (titleEl) {
+        titleEl.textContent = `${PRODUCT_NAMES[productKey]} comienza a dañarse el:`;
+    }
+
     // Formatear Fecha Crítica
     criticalDateDisplay.textContent = criticalDateObj.toLocaleDateString('es-ES', {
         day: '2-digit', month: 'short', year: 'numeric'
     });
+
+    // Iniciar Cuenta Regresiva
+    iniciarCountdown(criticalDateObj);
 
     // 4. Calcular días transcurridos
     const diasTranscurridos = getDaysElapsed(purchaseDateStr);
