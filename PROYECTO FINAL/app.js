@@ -175,11 +175,11 @@ function procesarCalculo(productKey, purchaseDateStr, v0) {
     const vt = v0 * Math.exp(-k * diasTranscurridos);
     currentValueDisplay.textContent = `Bs. ${vt.toFixed(2)}`;
 
-    // 6. Actualizar Semáforo
-    actualizarSemaforo(diasTranscurridos, tCritico);
+    // 6. Actualizar Semáforo basándonos en la fórmula (porcentaje de valor restante)
+    actualizarSemaforo(vt, v0);
 }
 
-function actualizarSemaforo(diasTranscurridos, tCritico) {
+function actualizarSemaforo(vt, v0) {
     // Resetear luces
     lightGreen.classList.remove('active');
     lightYellow.classList.remove('active');
@@ -188,23 +188,23 @@ function actualizarSemaforo(diasTranscurridos, tCritico) {
     // Limpiar clases de colores del título
     statusTitle.className = '';
 
-    // Ratio de avance
-    const ratio = diasTranscurridos / tCritico;
+    // Ratio de valor restante según la fórmula V(t)
+    const porcentajeRestante = vt / v0;
 
-    if (ratio < 0.7) {
-        // VERDE (0% a 70% del tiempo crítico)
+    if (porcentajeRestante > 0.70) {
+        // VERDE (Mantiene más del 70% de su valor)
         lightGreen.classList.add('active');
         statusTitle.textContent = "Producto Fresco";
         statusTitle.classList.add('status-green');
         statusDesc.textContent = "Venta normal. El producto mantiene su calidad estándar.";
-    } else if (ratio >= 0.7 && ratio < 1.0) {
-        // AMARILLO (70% a 100% del tiempo crítico)
+    } else if (porcentajeRestante > 0.20 && porcentajeRestante <= 0.70) {
+        // AMARILLO (Mantiene entre 20% y 70% de su valor)
         lightYellow.classList.add('active');
         statusTitle.textContent = "Día de Descuento";
         statusTitle.classList.add('status-yellow');
         statusDesc.textContent = "Aplica ofertas (2x1 o rebajas) rápido para evitar desperdicio total.";
     } else {
-        // ROJO (Más del 100% del tiempo crítico)
+        // ROJO (Cae por debajo del 20%, pérdida mayor al 80%)
         lightRed.classList.add('active');
         statusTitle.textContent = "Transferir a Eco-Punto";
         statusTitle.classList.add('status-red');
