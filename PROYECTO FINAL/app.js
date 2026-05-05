@@ -254,3 +254,44 @@ function actualizarSemaforo(vt, v0) {
         statusDesc.textContent = "Merma crítica superada. Llevar a compostaje en el mercado.";
     }
 }
+
+// ==========================================
+// CUENTA REGRESIVA
+// ==========================================
+function iniciarCountdown(criticalDateObj) {
+    const cdContainer = document.getElementById('countdown-timer');
+    const dEl = document.getElementById('cd-days');
+    const hEl = document.getElementById('cd-hours');
+    const mEl = document.getElementById('cd-minutes');
+    const sEl = document.getElementById('cd-seconds');
+
+    if (!cdContainer) return;
+    cdContainer.classList.remove('hidden');
+
+    function update() {
+        const now = new Date();
+        const diff = criticalDateObj.getTime() - now.getTime();
+
+        if (diff <= 0) {
+            dEl.textContent = '0';
+            hEl.textContent = '0';
+            mEl.textContent = '0';
+            sEl.textContent = '0';
+            clearInterval(timerInterval);
+            return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / 1000 / 60) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+
+        dEl.textContent = d;
+        hEl.textContent = h;
+        mEl.textContent = m;
+        sEl.textContent = s;
+    }
+
+    update();
+    timerInterval = setInterval(update, 1000);
+}
