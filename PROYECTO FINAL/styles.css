@@ -1,0 +1,490 @@
+/* ==========================================================================
+   Eco-Smart Estación Argentina - CSS
+   Modern, Mobile-First, Premium Jungle Green Theme
+   ========================================================================== */
+
+:root {
+    /* Color Palette */
+    --clr-primary: #1b5e20; /* Jungle Green Dark */
+    --clr-primary-light: #4caf50; /* Jungle Green Light */
+    --clr-secondary: #f1f8e9; /* Soft greenish white */
+    --clr-background: #e8f5e9;
+    --clr-surface: rgba(255, 255, 255, 0.85);
+    --clr-text-main: #2c3e50;
+    --clr-text-muted: #7f8c8d;
+    
+    /* Traffic Light Colors */
+    --clr-green: #2ecc71;
+    --clr-yellow: #f1c40f;
+    --clr-red: #e74c3c;
+    
+    /* Shadows & Effects */
+    --shadow-soft: 0 8px 32px rgba(27, 94, 32, 0.1);
+    --shadow-hover: 0 12px 40px rgba(27, 94, 32, 0.2);
+    --glass-blur: blur(12px);
+    
+    /* Typography */
+    --font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    
+    /* Radii */
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 8px;
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--clr-background);
+    color: var(--clr-text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    /* Soft gradient background */
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    padding: 20px;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+.app-container {
+    width: 100%;
+    max-width: 480px; /* Mobile First Constraints */
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+/* Header */
+.app-header {
+    text-align: center;
+    padding: 10px 0;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--clr-primary);
+    margin-bottom: 4px;
+}
+
+.logo h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--clr-text-muted);
+    font-weight: 400;
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+    background: var(--clr-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 24px;
+    transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Forms & Inputs */
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--clr-primary);
+}
+
+input, select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: var(--clr-secondary);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    color: var(--clr-text-main);
+    transition: var(--transition-fast);
+    outline: none;
+    appearance: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--clr-primary-light);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+}
+
+select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b5e20' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currency {
+    position: absolute;
+    left: 16px;
+    color: var(--clr-text-muted);
+    font-weight: 600;
+}
+
+#invested-amount {
+    padding-left: 48px;
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-family);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--clr-primary-light), var(--clr-primary));
+    color: white;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(27, 94, 32, 0.3);
+}
+
+.btn-primary:hover, .btn-primary:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 10px rgba(27, 94, 32, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--clr-primary);
+    border: 2px solid var(--clr-primary-light);
+    margin-top: 20px;
+}
+
+.btn-secondary:hover {
+    background: rgba(76, 175, 80, 0.1);
+}
+
+/* Loader */
+.loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    position: absolute;
+}
+
+/* Results Section */
+.hidden {
+    display: none !important;
+}
+
+.results-card {
+    animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Weather Widget */
+.weather-widget {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--clr-secondary);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+}
+
+.weather-icon {
+    font-size: 1.5rem;
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.city {
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.temp {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--clr-primary);
+}
+
+/* Traffic Light */
+.traffic-light-container {
+    display: flex;
+    justify-content: space-between;
+    background: #1a1a1a;
+    padding: 12px 24px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.light {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #333;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+/* Active states for lights */
+.light.green.active {
+    background: var(--clr-green);
+    box-shadow: 0 0 20px var(--clr-green), inset 0 0 10px rgba(255,255,255,0.5);
+}
+
+.light.yellow.active {
+    background: var(--clr-yellow);
+    box-shadow: 0 0 20px var(--clr-yellow), inset 0 0 10px rgba(255,255,255,0.5);
+}
+
+.light.red.active {
+    background: var(--clr-red);
+    box-shadow: 0 0 20px var(--clr-red), inset 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Status Message */
+.status-message {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#status-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+#status-desc {
+    font-size: 0.95rem;
+    color: var(--clr-text-muted);
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-box {
+    background: var(--clr-secondary);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.metric-box h3 {
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.metric-box .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--clr-primary);
+    margin-bottom: 4px;
+}
+
+.metric-box .sub-value {
+    font-size: 0.75rem;
+    color: var(--clr-text-muted);
+}
+
+/* State Classes for dynamic coloring */
+.status-green { color: var(--clr-green) !important; }
+.status-yellow { color: #d4ac0d !important; } /* Darker yellow for text */
+.status-red { color: var(--clr-red) !important; }
+
+/* ==========================================================================
+   Theory Section
+   ========================================================================== */
+.theory-section {
+    margin-top: 24px;
+    padding: 16px;
+    cursor: pointer;
+}
+
+.theory-section summary {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--clr-primary);
+    outline: none;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.theory-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.theory-section summary::after {
+    content: '+';
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.theory-section[open] summary::after {
+    transform: rotate(45deg);
+}
+
+.theory-content {
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: var(--clr-text-main);
+    border-top: 1px solid rgba(27, 94, 32, 0.1);
+    padding-top: 16px;
+    cursor: default;
+    animation: fadeInDown 0.4s ease-out;
+}
+
+.theory-content h4 {
+    margin: 16px 0 8px 0;
+    color: var(--clr-primary);
+}
+
+.theory-content p {
+    margin-bottom: 8px;
+}
+
+.theory-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 12px;
+}
+
+.theory-content .k-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.theory-content .k-list li {
+    background: var(--clr-secondary);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+}
+
+.formula {
+    background: #1a1a1a;
+    color: var(--clr-green);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    font-family: monospace;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin: 12px 0;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments for slightly larger screens */
+@media (min-width: 481px) {
+    body {
+        align-items: center;
+    }
+    .app-container {
+        margin: auto;
+    }
+}

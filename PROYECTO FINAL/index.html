@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Smart Estación Argentina</title>
+    <meta name="description" content="Calculadora de merma de productos para el Mercado Estación Argentina en Santa Cruz.">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 16L16 12L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h1>Eco-Smart</h1>
+            </div>
+            <p class="subtitle">Estación Argentina - Santa Cruz</p>
+        </header>
+
+        <!-- Main Form -->
+        <main class="main-card glass-panel">
+            <form id="calculator-form">
+                <div class="input-group">
+                    <label for="product">Producto Agrícola</label>
+                    <select id="product" required>
+                        <option value="" disabled selected>Selecciona un producto...</option>
+                        <option value="lechuga">Lechuga (Delicada)</option>
+                        <option value="cebolla">Cebolla (Resistente)</option>
+                        <option value="tomate">Tomate (Media)</option>
+                        <option value="papa">Papa (Muy resistente)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="purchase-date">Fecha de Compra</label>
+                    <input type="date" id="purchase-date" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="invested-amount">Monto Invertido (Bs.)</label>
+                    <div class="input-wrapper">
+                        <span class="currency">Bs.</span>
+                        <input type="number" id="invested-amount" min="1" step="0.5" placeholder="Ej. 100" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="calculate-btn">
+                    <span>Calcular Merma</span>
+                    <div class="loader hidden" id="btn-loader"></div>
+                </button>
+            </form>
+        </main>
+
+        <!-- Results Section -->
+        <section id="results-section" class="results-card glass-panel hidden">
+            <div class="weather-widget">
+                <span class="weather-icon">🌡️</span>
+                <div class="weather-info">
+                    <span class="city">Santa Cruz, BO</span>
+                    <span class="temp" id="current-temp">Cargando...</span>
+                </div>
+            </div>
+
+            <div class="traffic-light-container" id="traffic-light">
+                <div class="light green" id="light-green"></div>
+                <div class="light yellow" id="light-yellow"></div>
+                <div class="light red" id="light-red"></div>
+            </div>
+
+            <div class="status-message">
+                <h2 id="status-title">Estado del Producto</h2>
+                <p id="status-desc">---</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <h3>Comienza a dañarse el:</h3>
+                    <p class="value date-value" id="critical-date">--/--/----</p>
+                    <p class="sub-value">(Riesgo alto de merma)</p>
+                </div>
+                <div class="metric-box">
+                    <h3>Valor Actual Estimado</h3>
+                    <p class="value money-value" id="current-value">Bs. 0.00</p>
+                    <p class="sub-value">Modelo Exponencial V(t)</p>
+                </div>
+            </div>
+            
+            <button class="btn-secondary" id="reset-btn">Nuevo Cálculo</button>
+        </section>
+
+        <!-- Theory Section -->
+        <details class="theory-section glass-panel">
+            <summary>¿Cómo funciona esta estimación?</summary>
+            <div class="theory-content">
+                <p>Esta aplicación utiliza un <strong>modelo de decaimiento exponencial</strong> para predecir la pérdida de calidad en los productos.</p>
+                
+                <h4>Fórmula Principal</h4>
+                <p class="formula">V(t) = V₀ &middot; e<sup>-kt</sup></p>
+                <ul>
+                    <li><strong>V(t):</strong> Valor económico actual.</li>
+                    <li><strong>V₀:</strong> Monto invertido inicial.</li>
+                    <li><strong>e:</strong> Constante de Euler (~2.718).</li>
+                    <li><strong>k:</strong> Constante de deterioro del producto.</li>
+                    <li><strong>t:</strong> Días desde la compra.</li>
+                </ul>
+
+                <h4>Constantes (k)</h4>
+                <ul class="k-list">
+                    <li>🥬 Lechuga: 0.320 (Delicada)</li>
+                    <li>🧅 Cebolla: 0.110 (Resistente)</li>
+                    <li>🍅 Tomate: 0.099 (Media)</li>
+                    <li>🥔 Papa: 0.083 (Muy resistente)</li>
+                </ul>
+
+                <h4>Factor Clima Cruceño</h4>
+                <p>La app consulta el clima local en vivo. Si la temperatura supera los <strong>30°C</strong>, el deterioro (k) incrementa un <strong>20%</strong> automáticamente.</p>
+
+                <h4>Cálculo del Semáforo</h4>
+                <p>El día crítico (Semáforo Rojo) se alcanza al perder el 80% del valor. Se calcula con:</p>
+                <p class="formula">t = 1.6094 / k</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- Script references -->
+    <script src="app.js"></script>
+</body>
+</html>
